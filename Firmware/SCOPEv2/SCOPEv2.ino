@@ -2,8 +2,8 @@
  * @file SCOPEv2.ino
  * @author Modulove
  * @brief Eurorack scope + Tuner + Function Generator
- * @version 3.4
- * @date 2025-02-15
+ * @version 3.4.1
+ * @date 2026-05-25
  *
  * Modes: LFO / WAVE / TUNER / GEN (4 modes)
  *
@@ -774,7 +774,7 @@ void setup()
   display->print(F("SCOPE"));
   display->setTextSize(1);
   display->setCursor(16, 32);
-  display->print(F("Modulove v3.4"));
+  display->print(F("Modulove v3.4.1"));
   display->setCursor(0, 56);
   display->print(isHWv25 ? F("v2.5") : F("v2"));
   display->print(isLGT8F ? F(" LGT") : F(" 328"));
@@ -1476,10 +1476,12 @@ void drawParameterBar(bool showParams)
   if (!showParams)
     return;
   display->setTextSize(1);
+  bool cursorNavActive = (param_select == 0);
 
   // Slot 1: Mode
   display->setTextColor(param_select == 1 ? BLACK : WHITE, param_select == 1 ? WHITE : BLACK);
   display->setCursor(0, 0);
+  uint8_t slot1Width = 18;
   switch (mode)
   {
   case MODE_LFO:
@@ -1487,18 +1489,23 @@ void drawParameterBar(bool showParams)
     break;
   case MODE_WAVE:
     display->print(F("WAVE"));
+    slot1Width = 24;
     break;
   case MODE_TUNER:
     display->print(F("TUNE"));
+    slot1Width = 24;
     break;
   case MODE_GEN:
     display->print(F("GEN"));
     break;
   }
+  if (cursorNavActive && param == 1)
+    display->drawFastHLine(0, 8, slot1Width, WHITE);
 
   // Slot 2: Param1
   display->setTextColor(param_select == 2 ? BLACK : WHITE, param_select == 2 ? WHITE : BLACK);
   display->setCursor(36, 0);
+  uint8_t slot2Width = 18;
   switch (mode)
   {
   case MODE_LFO:
@@ -1508,6 +1515,7 @@ void drawParameterBar(bool showParams)
     break;
   case MODE_TUNER:
     display->print(F("ZC"));
+    slot2Width = 12;
     break;
   case MODE_GEN:
   {
@@ -1517,18 +1525,22 @@ void drawParameterBar(bool showParams)
   }
   break;
   }
+  if (cursorNavActive && param == 2)
+    display->drawFastHLine(36, 8, slot2Width, WHITE);
 
   // Slot 3: Param2
   if (mode == MODE_GEN)
   {
     display->setTextColor(param_select == 3 ? BLACK : WHITE, param_select == 3 ? WHITE : BLACK);
     display->setCursor(66, 0);
+    uint8_t slot3Width;
     if (param1 == 5)
     {
       char v[6];
       fmtDec1(v, param2);
       display->print(v);
       display->print('V');
+      slot3Width = (strlen(v) + 1) * 6;
     }
     else
     {
@@ -1536,7 +1548,10 @@ void drawParameterBar(bool showParams)
       char f[10];
       fmtFreq(f, fX10);
       display->print(f);
+      slot3Width = strlen(f) * 6;
     }
+    if (cursorNavActive && param == 3)
+      display->drawFastHLine(66, 8, slot3Width, WHITE);
   }
   else if (mode != MODE_TUNER)
   {
@@ -1544,6 +1559,11 @@ void drawParameterBar(bool showParams)
     display->setCursor(78, 0);
     display->print(mode == MODE_LFO ? F("O:") : F("R:"));
     display->print(param2);
+    if (cursorNavActive && param == 3)
+    {
+      uint8_t slot3Width = (param2 < 0) ? 24 : 18;
+      display->drawFastHLine(78, 8, slot3Width, WHITE);
+    }
   }
 }
 
