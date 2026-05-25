@@ -6,6 +6,14 @@
 #define IS_LGT8F 0
 #endif
 
+// 0 = Compile without support for the generator mode, which saves
+// about 1.5KB of flash and 100 bytes of RAM. The generator mode will be hidden in the UI and inaccessible.
+// This is recommended if you don't have compatible hardware or don't need the generator mode features.
+// 1 = Compile with support for enabling the generator mode (requires compatible hardware)
+#ifndef ENABLE_GEN_MODE
+#define ENABLE_GEN_MODE 0
+#endif
+
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 
@@ -48,7 +56,12 @@
 #define MODE_WAVE 2
 #define MODE_TUNER 3
 #define MODE_GEN 4
+
+#if ENABLE_GEN_MODE
 #define NUM_MODES 4
+#else
+#define NUM_MODES 3
+#endif
 
 #define ADC_BUFFER_SIZE 256
 #define GEN_NUM_FREQS 14

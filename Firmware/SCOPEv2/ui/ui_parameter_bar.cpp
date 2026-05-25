@@ -4,7 +4,9 @@
 
 #include "../core/scope_config.h"
 #include "../core/scope_state.h"
+#if ENABLE_GEN_MODE
 #include "../dsp/dsp_generator.h"
+#endif
 #include "../dsp/util_format.h"
 
 static uint8_t getActiveSlot()
@@ -65,9 +67,11 @@ static void drawLargeParameterPanel()
         case MODE_TUNER:
             display->print(F(" TUNE"));
             break;
+#if ENABLE_GEN_MODE
         case MODE_GEN:
             display->print(F(" GEN"));
             break;
+#endif
         }
 
         display->setTextSize(1);
@@ -91,9 +95,11 @@ static void drawLargeParameterPanel()
         case MODE_TUNER:
             display->print(F("ZERO X"));
             break;
+#if ENABLE_GEN_MODE
         case MODE_GEN:
             display->print(F("WAVE"));
             break;
+#endif
         }
     }
     else
@@ -108,9 +114,11 @@ static void drawLargeParameterPanel()
             display->print(F(" RANGE "));
             labelHasPadding = true;
             break;
+#if ENABLE_GEN_MODE
         case MODE_GEN:
             display->print(param1 == 5 ? F("LEVEL") : F("FREQ"));
             break;
+#endif
         }
     }
 
@@ -128,6 +136,7 @@ static void drawLargeParameterPanel()
         case MODE_TUNER:
             display->print(F("ON"));
             break;
+#if ENABLE_GEN_MODE
         case MODE_GEN:
         {
             char w[4];
@@ -135,6 +144,7 @@ static void drawLargeParameterPanel()
             display->print(w);
         }
         break;
+#endif
         }
     }
     else
@@ -145,6 +155,7 @@ static void drawLargeParameterPanel()
         case MODE_WAVE:
             display->print(param2);
             break;
+#if ENABLE_GEN_MODE
         case MODE_GEN:
             if (param1 == 5)
             {
@@ -161,6 +172,7 @@ static void drawLargeParameterPanel()
                 display->print(f);
             }
             break;
+#endif
         }
     }
     display->setTextSize(1);
@@ -192,9 +204,11 @@ void drawParameterBar(bool showParams)
         display->print(F("TUNE"));
         slot1Width = 24;
         break;
+#if ENABLE_GEN_MODE
     case MODE_GEN:
         display->print(F("GEN"));
         break;
+#endif
     }
     if (cursorNavActive && param == 1)
         display->drawFastHLine(0, 8, slot1Width, WHITE);
@@ -213,6 +227,7 @@ void drawParameterBar(bool showParams)
         display->print(F("ZC"));
         slot2Width = 12;
         break;
+#if ENABLE_GEN_MODE
     case MODE_GEN:
     {
         char w[4];
@@ -220,10 +235,13 @@ void drawParameterBar(bool showParams)
         display->print(w);
     }
     break;
+#endif
     }
     if (cursorNavActive && param == 2)
         display->drawFastHLine(36, 8, slot2Width, WHITE);
 
+    
+#if ENABLE_GEN_MODE
     if (mode == MODE_GEN)
     {
         display->setTextColor(param_select == 3 ? BLACK : WHITE, param_select == 3 ? WHITE : BLACK);
@@ -248,7 +266,9 @@ void drawParameterBar(bool showParams)
         if (cursorNavActive && param == 3)
             display->drawFastHLine(66, 8, slot3Width, WHITE);
     }
-    else if (mode != MODE_TUNER)
+    else
+#endif
+    if (mode != MODE_TUNER)
     {
         display->setTextColor(param_select == 3 ? BLACK : WHITE, param_select == 3 ? WHITE : BLACK);
         display->setCursor(78, 0);

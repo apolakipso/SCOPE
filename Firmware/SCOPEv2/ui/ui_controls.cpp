@@ -93,6 +93,7 @@ bool processUiControls()
                 mode = NUM_MODES;
             if (mode > NUM_MODES)
                 mode = 1;
+#if ENABLE_GEN_MODE
             if (mode == MODE_GEN && !genAvailable)
             {
                 mode += enc;
@@ -101,6 +102,7 @@ bool processUiControls()
                 if (mode > NUM_MODES)
                     mode = 1;
             }
+#endif
             break;
         case 2:
         {
@@ -114,9 +116,11 @@ bool processUiControls()
             case MODE_TUNER:
                 mx = 1;
                 break;
+#if ENABLE_GEN_MODE
             case MODE_GEN:
                 mx = 5;
                 break;
+#endif
             default:
                 mx = 8;
                 break;
@@ -126,6 +130,7 @@ bool processUiControls()
                 param1 = mx;
             if (param1 > mx)
                 param1 = mn;
+#if ENABLE_GEN_MODE
             if (mode == MODE_GEN)
             {
                 if (param1 == 5)
@@ -139,6 +144,7 @@ bool processUiControls()
                         param2 = 4;
                 }
             }
+#endif
         }
         break;
         case 3:
@@ -154,10 +160,12 @@ bool processUiControls()
                 mn = 1;
                 mx = 6;
                 break;
+#if ENABLE_GEN_MODE
             case MODE_GEN:
                 mn = (param1 == 5) ? 0 : 1;
                 mx = (param1 == 5) ? GEN_DC_MAX : GEN_NUM_FREQS;
                 break;
+#endif
             default:
                 mn = 1;
                 mx = 1;

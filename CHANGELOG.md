@@ -2,6 +2,14 @@
 
 All notable firmware changes are documented in this file.
 
+## [3.4.16] - 2026-05-26
+
+- Implemented build-time GEN feature gating with `ENABLE_GEN_MODE` in `scope_config.h`.
+- Added compile-time guards across main loop, mode setup, UI controls/rendering, settings validation, and hardware detection so GEN can be fully compiled out.
+- Updated `SCOPEv2_modules.cpp` so `mode_gen`, `dsp_generator`, and `hal_dac` modules are excluded from the build when GEN is disabled.
+- Set default to slim build (`ENABLE_GEN_MODE=0`). Set `ENABLE_GEN_MODE=1` to include GEN again.
+- Updated SCOPEv2 version strings to `3.4.16` for patch-level flash verification.
+
 ## [3.4.15] - 2026-05-26
 
 - Added the built-in smiley glyph (`0x02`) to the SCOPEv2 MODE/LFO 3x banner label in the temporary large overlay.

@@ -5,14 +5,18 @@
 #include "../core/scope_config.h"
 #include "../core/scope_state.h"
 #include "../hal/hal_adc.h"
+#if ENABLE_GEN_MODE
 #include "../hal/hal_dac.h"
 #include "../dsp/dsp_generator.h"
+#endif
 
 void setupMode(uint8_t m)
 {
     stopADCSampling();
+#if ENABLE_GEN_MODE
     if (genAvailable)
         dacStop();
+#endif
 
     uint8_t idx = m - 1;
     if (idx < NUM_MODES)
@@ -39,6 +43,7 @@ void setupMode(uint8_t m)
         smoothedFrequency = 0;
         tunerSampleRate = 2;
         break;
+#if ENABLE_GEN_MODE
     case MODE_GEN:
         analogWrite(OFFSET_PIN, 0);
         pinMode(FILTER_PIN, INPUT);
@@ -53,6 +58,7 @@ void setupMode(uint8_t m)
             genPhaseInc = 0;
         }
         break;
+#endif
     }
 
     memset(buffer, 0, sizeof(buffer));

@@ -64,6 +64,7 @@ void loadAllSettings()
             modeSettings[m].param1 = 1;
             modeSettings[m].param2 = 1;
             break;
+#if ENABLE_GEN_MODE
         case MODE_GEN:
             modeSettings[m].param1 = constrain(modeSettings[m].param1, 1, 5);
             if (!modeSettings[m].param1)
@@ -79,6 +80,7 @@ void loadAllSettings()
                     modeSettings[m].param2 = 4;
             }
             break;
+#endif
         }
     }
 }

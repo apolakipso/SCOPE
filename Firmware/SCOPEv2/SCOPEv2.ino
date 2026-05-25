@@ -2,7 +2,7 @@
  * @file SCOPEv2.ino
  * @author Modulove
  * @brief Eurorack scope + Tuner + Function Generator
- * @version 3.4.15
+ * @version 3.4.16
  * @date 2026-05-25
  */
 
@@ -20,7 +20,9 @@
 #include "mode/mode_lfo.h"
 #include "mode/mode_wave.h"
 #include "mode/mode_tuner.h"
+#if ENABLE_GEN_MODE
 #include "mode/mode_gen.h"
+#endif
 
 static void drawBootSplash()
 {
@@ -31,13 +33,15 @@ static void drawBootSplash()
 
   display->setTextSize(1);
   display->setCursor(16, 32);
-  display->print(F("Modulove v3.4.15"));
+  display->print(F("Modulove v3.4.16"));
 
   display->setCursor(0, 56);
   display->print(isHWv25 ? F("v2.5") : F("v2"));
   display->print(isLGT8F ? F(" LGT") : F(" 328"));
+#if ENABLE_GEN_MODE
   if (genAvailable)
     display->print(dacIsI2C ? F(" I2C") : F(" DAC"));
+#endif
   display->display();
   delay(800);
 }
@@ -59,9 +63,11 @@ void setup()
     menuTimer = 5;
 
   uint8_t lastMode = EEPROM.read(EEPROM_MODE_ADDR);
-  mode = (lastMode >= MODE_LFO && lastMode <= MODE_GEN) ? lastMode : MODE_LFO;
+  mode = (lastMode >= MODE_LFO && lastMode <= NUM_MODES) ? lastMode : MODE_LFO;
+#if ENABLE_GEN_MODE
   if (mode == MODE_GEN && !genAvailable)
     mode = MODE_LFO;
+#endif
 
   initDisplay();
   drawBootSplash();
@@ -96,9 +102,11 @@ void loop()
   case MODE_TUNER:
     runTunerMode(showParams);
     break;
+#if ENABLE_GEN_MODE
   case MODE_GEN:
     runGeneratorMode(showParams);
     return;
+#endif
   }
 
   display->display();
