@@ -35,7 +35,7 @@ static void drawBootSplash()
   display->setCursor(16, 32);
   display->print(F("Modulove v3.4.16"));
 
-  display->setCursor(0, 56);
+  display->setCursor(16, 52);
   display->print(isHWv25 ? F("v2.5") : F("v2"));
   display->print(isLGT8F ? F(" LGT") : F(" 328"));
 #if ENABLE_GEN_MODE
