@@ -7,10 +7,171 @@
 #include "../dsp/dsp_generator.h"
 #include "../dsp/util_format.h"
 
+static uint8_t getActiveSlot()
+{
+    return (param_select == 0) ? param : param_select;
+}
+
+static bool shouldShowLargeOverlay(bool showParams)
+{
+    if (!showParams)
+        return false;
+
+    static bool initialized = false;
+    static uint8_t prevMode = 0;
+    static uint8_t prevParam1 = 0;
+    static uint8_t prevParam2 = 0;
+    static unsigned long lastValueChangeMs = 0;
+
+    if (!initialized)
+    {
+        prevMode = mode;
+        prevParam1 = param1;
+        prevParam2 = param2;
+        initialized = true;
+    }
+
+    if (prevMode != mode || prevParam1 != param1 || prevParam2 != param2)
+    {
+        prevMode = mode;
+        prevParam1 = param1;
+        prevParam2 = param2;
+        lastValueChangeMs = millis();
+    }
+
+    return lastValueChangeMs > 0 && (millis() - lastValueChangeMs < 1000UL);
+}
+
+static void drawLargeParameterPanel()
+{
+    const uint8_t activeSlot = getActiveSlot();
+
+    if (activeSlot == 1)
+    {
+        display->fillRect(0, 8, 128, 56, BLACK);
+        display->setTextSize(3);
+        display->setTextColor(WHITE);
+        display->setCursor(6, 20);
+
+        switch (mode)
+        {
+        case MODE_LFO:
+            display->print(F(" LFO"));
+            display->write((uint8_t)2);
+            break;
+        case MODE_WAVE:
+            display->print(F(" WAVE"));
+            break;
+        case MODE_TUNER:
+            display->print(F(" TUNE"));
+            break;
+        case MODE_GEN:
+            display->print(F(" GEN"));
+            break;
+        }
+
+        display->setTextSize(1);
+        return;
+    }
+
+    display->setTextSize(2);
+    display->setTextColor(WHITE);
+    display->setCursor(6, 22);
+    bool labelHasPadding = false;
+
+    if (activeSlot == 2)
+    {
+        switch (mode)
+        {
+        case MODE_LFO:
+        case MODE_WAVE:
+            display->print(F("  TIME "));
+            labelHasPadding = true;
+            break;
+        case MODE_TUNER:
+            display->print(F("ZERO X"));
+            break;
+        case MODE_GEN:
+            display->print(F("WAVE"));
+            break;
+        }
+    }
+    else
+    {
+        switch (mode)
+        {
+        case MODE_LFO:
+            display->print(F(" OFFSET "));
+            labelHasPadding = true;
+            break;
+        case MODE_WAVE:
+            display->print(F(" RANGE "));
+            labelHasPadding = true;
+            break;
+        case MODE_GEN:
+            display->print(param1 == 5 ? F("LEVEL") : F("FREQ"));
+            break;
+        }
+    }
+
+    if (!labelHasPadding)
+        display->print(' ');
+
+    if (activeSlot == 2)
+    {
+        switch (mode)
+        {
+        case MODE_LFO:
+        case MODE_WAVE:
+            display->print(param1);
+            break;
+        case MODE_TUNER:
+            display->print(F("ON"));
+            break;
+        case MODE_GEN:
+        {
+            char w[4];
+            memcpy_P(w, genWaveNames[constrain(param1, 1, 5) - 1], 4);
+            display->print(w);
+        }
+        break;
+        }
+    }
+    else
+    {
+        switch (mode)
+        {
+        case MODE_LFO:
+        case MODE_WAVE:
+            display->print(param2);
+            break;
+        case MODE_GEN:
+            if (param1 == 5)
+            {
+                char v[6];
+                fmtDec1(v, param2);
+                display->print(v);
+                display->print('V');
+            }
+            else
+            {
+                char f[10];
+                uint16_t fX10 = pgm_read_word(&genFreqTableX10[constrain(param2, 1, GEN_NUM_FREQS) - 1]);
+                fmtFreq(f, fX10);
+                display->print(f);
+            }
+            break;
+        }
+    }
+    display->setTextSize(1);
+}
+
 void drawParameterBar(bool showParams)
 {
     if (!showParams)
         return;
+
+    bool showLargeOverlay = shouldShowLargeOverlay(showParams);
 
     display->setTextSize(1);
     bool cursorNavActive = (param_select == 0);
@@ -99,4 +260,7 @@ void drawParameterBar(bool showParams)
             display->drawFastHLine(78, 8, slot3Width, WHITE);
         }
     }
+
+    if (showLargeOverlay)
+        drawLargeParameterPanel();
 }

@@ -2,6 +2,51 @@
 
 All notable firmware changes are documented in this file.
 
+## [3.4.15] - 2026-05-26
+
+- Added the built-in smiley glyph (`0x02`) to the SCOPEv2 MODE/LFO 3x banner label in the temporary large overlay.
+- Updated SCOPEv2 version strings to `3.4.15` for patch-level flash verification.
+
+## [3.4.14] - 2026-05-26
+
+- Updated SCOPEv2 2x temporary parameter overlay labels to fixed space-padded strings for alignment:
+  - `" OFFSET " + value`
+  - `"  RANGE " + value`
+  - `"   TIME " + value`
+- Kept existing MODE 3x black banner behavior and 1-second overlay timing.
+- Updated SCOPEv2 version strings to `3.4.14` for patch-level flash verification.
+
+## [3.4.13] - 2026-05-26
+
+- Changed the MODE overlay in SCOPEv2 to a 3x banner with a full black background, left padding, and no "MODE" prefix text.
+- Kept the other temporary parameter overlays as the existing 1-second transparent text line.
+- Updated SCOPEv2 version strings to `3.4.13` for patch-level flash verification.
+
+## [3.4.12] - 2026-05-26
+
+- Reduced the temporary large parameter overlay lifetime from about 3 seconds to about 1 second.
+- Changed the overlay to a single left-padded line and removed the explicit black background fill so the scope trace can show through underneath while the text is visible.
+- Updated SCOPEv2 version strings to `3.4.12` for patch-level flash verification.
+
+## [3.4.11] - 2026-05-25
+
+- Reduced SCOPEv2 UI flash usage in the temporary large-parameter overlay path by removing buffer/`snprintf`-based formatting and rendering label/value directly.
+- Preserved behavior: compact top row unchanged, left-aligned large overlay below it, auto-hide after about 3 seconds after value change.
+- Updated SCOPEv2 version strings to `3.4.11` for patch-level flash verification.
+
+## [3.4.10] - 2026-05-25
+
+- Changed the temporary large parameter overlay text to left alignment (label and value) in SCOPEv2.
+- Removed centering helper/alignment math from the overlay renderer to trim code size while preserving the 3-second temporary display behavior.
+- Updated SCOPEv2 version strings to `3.4.10` for patch-level flash verification.
+
+## [3.4.9] - 2026-05-25
+
+- Implemented Option A large parameter overlay using classic Adafruit_GFX text scaling (`setTextSize(2)`) in SCOPEv2 parameter UI.
+- Kept the existing compact top parameter row unchanged.
+- Added temporary large active parameter label/value rendering below the top row that appears after a parameter value change and auto-hides after about 3 seconds.
+- Updated SCOPEv2 version strings to `3.4.9` for patch-level flash verification.
+
 ## [3.4.8] - 2026-05-25
 
 - Fixed the remaining module-relative include paths after moving SCOPEv2 sources into foldered modules.

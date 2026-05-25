@@ -2,7 +2,7 @@
  * @file SCOPEv2.ino
  * @author Modulove
  * @brief Eurorack scope + Tuner + Function Generator
- * @version 3.4.8
+ * @version 3.4.15
  * @date 2026-05-25
  */
 
@@ -31,7 +31,7 @@ static void drawBootSplash()
 
   display->setTextSize(1);
   display->setCursor(16, 32);
-  display->print(F("Modulove v3.4.8"));
+  display->print(F("Modulove v3.4.15"));
 
   display->setCursor(0, 56);
   display->print(isHWv25 ? F("v2.5") : F("v2"));
