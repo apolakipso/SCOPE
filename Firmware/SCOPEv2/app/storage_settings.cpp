@@ -60,6 +60,14 @@ void loadAllSettings()
             if (!modeSettings[m].param2)
                 modeSettings[m].param2 = 1;
             break;
+        case MODE_SPECTRUM:
+            modeSettings[m].param1 = constrain(modeSettings[m].param1, 1, 4);
+            modeSettings[m].param2 = constrain(modeSettings[m].param2, 1, 8);
+            if (!modeSettings[m].param1)
+                modeSettings[m].param1 = 1;
+            if (!modeSettings[m].param2)
+                modeSettings[m].param2 = 8;
+            break;
         case MODE_TUNER:
             modeSettings[m].param1 = 1;
             modeSettings[m].param2 = 1;

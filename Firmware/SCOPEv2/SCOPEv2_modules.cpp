@@ -22,6 +22,7 @@
 
 #include "mode/mode_lfo.cpp"
 #include "mode/mode_wave.cpp"
+#include "mode/mode_spectrum.cpp"
 #include "mode/mode_tuner.cpp"
 #if ENABLE_GEN_MODE
 #include "mode/mode_gen.cpp"

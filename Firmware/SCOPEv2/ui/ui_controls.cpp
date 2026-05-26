@@ -113,6 +113,9 @@ bool processUiControls()
             case MODE_WAVE:
                 mx = 8;
                 break;
+            case MODE_SPECTRUM:
+                mx = 4;
+                break;
             case MODE_TUNER:
                 mx = 1;
                 break;
@@ -159,6 +162,10 @@ bool processUiControls()
             case MODE_WAVE:
                 mn = 1;
                 mx = 6;
+                break;
+            case MODE_SPECTRUM:
+                mn = 1;
+                mx = 8;
                 break;
 #if ENABLE_GEN_MODE
             case MODE_GEN:

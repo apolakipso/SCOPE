@@ -64,6 +64,9 @@ static void drawLargeParameterPanel()
         case MODE_WAVE:
             display->print(F(" WAVE"));
             break;
+        case MODE_SPECTRUM:
+            display->print(F(" SPEC"));
+            break;
         case MODE_TUNER:
             display->print(F(" TUNE"));
             break;
@@ -92,6 +95,9 @@ static void drawLargeParameterPanel()
             display->print(F("  TIME "));
             labelHasPadding = true;
             break;
+        case MODE_SPECTRUM:
+            display->print(F(" HIGH"));
+            break;
         case MODE_TUNER:
             display->print(F("ZERO X"));
             break;
@@ -114,6 +120,9 @@ static void drawLargeParameterPanel()
             display->print(F(" RANGE "));
             labelHasPadding = true;
             break;
+        case MODE_SPECTRUM:
+            display->print(F(" FILTER"));
+            break;
 #if ENABLE_GEN_MODE
         case MODE_GEN:
             display->print(param1 == 5 ? F("LEVEL") : F("FREQ"));
@@ -131,6 +140,9 @@ static void drawLargeParameterPanel()
         {
         case MODE_LFO:
         case MODE_WAVE:
+            display->print(param1);
+            break;
+        case MODE_SPECTRUM:
             display->print(param1);
             break;
         case MODE_TUNER:
@@ -153,6 +165,9 @@ static void drawLargeParameterPanel()
         {
         case MODE_LFO:
         case MODE_WAVE:
+            display->print(param2);
+            break;
+        case MODE_SPECTRUM:
             display->print(param2);
             break;
 #if ENABLE_GEN_MODE
@@ -200,6 +215,10 @@ void drawParameterBar(bool showParams)
         display->print(F("WAVE"));
         slot1Width = 24;
         break;
+    case MODE_SPECTRUM:
+        display->print(F("SPEC"));
+        slot1Width = 24;
+        break;
     case MODE_TUNER:
         display->print(F("TUNE"));
         slot1Width = 24;
@@ -223,6 +242,10 @@ void drawParameterBar(bool showParams)
         display->print(F("T:"));
         display->print(param1);
         break;
+    case MODE_SPECTRUM:
+        display->print(F("H:"));
+        display->print(param1);
+        break;
     case MODE_TUNER:
         display->print(F("ZC"));
         slot2Width = 12;
@@ -240,7 +263,6 @@ void drawParameterBar(bool showParams)
     if (cursorNavActive && param == 2)
         display->drawFastHLine(36, 8, slot2Width, WHITE);
 
-    
 #if ENABLE_GEN_MODE
     if (mode == MODE_GEN)
     {
@@ -268,11 +290,16 @@ void drawParameterBar(bool showParams)
     }
     else
 #endif
-    if (mode != MODE_TUNER)
+        if (mode != MODE_TUNER)
     {
         display->setTextColor(param_select == 3 ? BLACK : WHITE, param_select == 3 ? WHITE : BLACK);
         display->setCursor(78, 0);
-        display->print(mode == MODE_LFO ? F("O:") : F("R:"));
+        if (mode == MODE_LFO)
+            display->print(F("O:"));
+        else if (mode == MODE_WAVE)
+            display->print(F("R:"));
+        else
+            display->print(F("F:"));
         display->print(param2);
         if (cursorNavActive && param == 3)
         {

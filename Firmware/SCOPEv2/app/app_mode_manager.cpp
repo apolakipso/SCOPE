@@ -37,6 +37,10 @@ void setupMode(uint8_t m)
         analogWrite(OFFSET_PIN, 127);
         pinMode(FILTER_PIN, INPUT);
         break;
+    case MODE_SPECTRUM:
+        analogWrite(OFFSET_PIN, 127);
+        pinMode(FILTER_PIN, INPUT);
+        break;
     case MODE_TUNER:
         analogWrite(OFFSET_PIN, 127);
         pinMode(FILTER_PIN, INPUT);

@@ -54,13 +54,14 @@
 
 #define MODE_LFO 1
 #define MODE_WAVE 2
-#define MODE_TUNER 3
-#define MODE_GEN 4
+#define MODE_SPECTRUM 3
+#define MODE_TUNER 4
+#define MODE_GEN 5
 
 #if ENABLE_GEN_MODE
-#define NUM_MODES 4
+#define NUM_MODES 5
 #else
-#define NUM_MODES 3
+#define NUM_MODES 4
 #endif
 
 #define ADC_BUFFER_SIZE 256

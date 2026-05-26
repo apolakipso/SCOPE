@@ -2,6 +2,14 @@
 
 All notable firmware changes are documented in this file.
 
+## [3.4.17] - 2026-05-26
+
+- Added SPECTRUM mode to SCOPEv2 by extracting and adapting the legacy implementation into the modular codebase.
+- Introduced new mode module files: `mode/mode_spectrum.h` and `mode/mode_spectrum.cpp` and wired them into `SCOPEv2_modules.cpp` and main loop dispatch.
+- Expanded mode indexing and constants to include SPECTRUM (`MODE_SPECTRUM=3`), shifting TUNER/GEN IDs accordingly and increasing `NUM_MODES`.
+- Updated mode setup, UI controls, parameter bar labels/overlays, and EEPROM setting validation so SPECTRUM parameters persist and edit correctly (`param1: 1..4`, `param2: 1..8`).
+- Updated SCOPEv2 version strings to `3.4.17` for patch-level flash verification.
+
 ## [3.4.16] - 2026-05-26
 
 - Implemented build-time GEN feature gating with `ENABLE_GEN_MODE` in `scope_config.h`.

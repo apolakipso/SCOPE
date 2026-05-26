@@ -1,9 +1,9 @@
 /**
  * @file SCOPEv2.ino
  * @author Modulove
- * @brief Eurorack scope + Tuner + Function Generator
- * @version 3.4.16
- * @date 2026-05-25
+ * @brief Eurorack scope + Spectrum + Tuner + Function Generator
+ * @version 3.4.17
+ * @date 2026-05-26
  */
 
 #include <EEPROM.h>
@@ -19,6 +19,7 @@
 
 #include "mode/mode_lfo.h"
 #include "mode/mode_wave.h"
+#include "mode/mode_spectrum.h"
 #include "mode/mode_tuner.h"
 #if ENABLE_GEN_MODE
 #include "mode/mode_gen.h"
@@ -33,7 +34,7 @@ static void drawBootSplash()
 
   display->setTextSize(1);
   display->setCursor(16, 32);
-  display->print(F("Modulove v3.4.16"));
+  display->print(F("Modulove v3.4.17"));
 
   display->setCursor(16, 52);
   display->print(isHWv25 ? F("v2.5") : F("v2"));
@@ -98,6 +99,9 @@ void loop()
     break;
   case MODE_WAVE:
     runWaveMode(showParams);
+    break;
+  case MODE_SPECTRUM:
+    runSpectrumMode(showParams);
     break;
   case MODE_TUNER:
     runTunerMode(showParams);
